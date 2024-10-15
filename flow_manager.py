@@ -83,3 +83,31 @@ class FlowManager:
             flow.status = "completed"
             # メトリクスの記録など
             pass
+
+    def schedule_flow_starts(self, simulation_engine: SimulationEngine):
+        """
+        フロー開始イベントをスケジュール
+
+        Args:
+            simulation_engine (SimulationEngine): シミュレーションエンジン
+        """
+        for flow in self.flows.values():
+            start_time = random.uniform(0, simulation_engine.simulation_end_time / 2)
+            flow.start_time = start_time
+            simulation_engine.schedule_event(start_time, lambda f=flow: self.start_flow(f))
+
+    def start_flow(self, flow: Flow):
+        """
+        フローを開始
+
+        Args:
+            flow (Flow): フローオブジェクト
+        """
+        # パケットを生成
+        packets = self.packet_manager.create_packets(flow)
+        # 最初のパケットを送信
+        if packets:
+            first_packet = packets[0]
+            source_node = self.topology_manager.get_node(flow.source_node)
+            if source_node:
+                self.packet_manager.send_packet(first_packet, source_node)

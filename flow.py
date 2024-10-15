@@ -37,3 +37,4 @@ class Flow:
         self.destination_node = destination_node
         self.packets: List[Packet] = []
         self.status = "active"
+        self.start_time: float = 0.0  # フロー開始時間

@@ -35,6 +35,7 @@ class Link:
         self.jitter = jitter
         self.status = "active"
         self.connected_nodes = connected_nodes
+        self.packet_loss_count: int = 0  # パケットロスのカウント
 
     def transmit_packet(self, packet: Packet) -> bool:
         """

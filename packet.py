@@ -30,3 +30,5 @@ class Packet:
         self.route: List[int] = []
         self.current_node_index = 0
         self.status = "in_transit"
+        self.sent_time: float = 0.0  # 送信時間
+        self.arrival_time: float = 0.0  # 到着時間
