@@ -5,6 +5,8 @@ from typing import Optional, Dict, List
 import yaml
 from flow import Flow
 from topology_manager import TopologyManager
+from simulation_engine import SimulationEngine
+
 
 class FlowManager:
     """

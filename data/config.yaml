@@ -1,0 +1,25 @@
+# data/config.yaml
+
+simulation_parameters:
+  simulation_time: 1000.0          # シミュレーションの総時間（秒）
+  failure_rate: 0.01               # 障害発生率（0から1の間の値）
+  failure_distribution: "uniform"  # 障害継続時間の分布（"uniform" または "exponential"）
+  algorithm: "dijkstra"            # 使用するルーティングアルゴリズム（"dijkstra", "dqn", "ddpg"）
+
+flow_scenario:
+  flows:
+    - flow_id: 1
+      service_type: "video"
+      flow_size: 10000000        # フローサイズ（バイト）
+      source_node: 1
+      destination_node: 5
+    - flow_id: 2
+      service_type: "data"
+      flow_size: 5000000
+      source_node: 2
+      destination_node: 6
+    - flow_id: 3
+      service_type: "voice"
+      flow_size: 2000000
+      source_node: 3
+      destination_node: 4

@@ -1,0 +1,81 @@
+# data/topology.yaml
+
+nodes:
+  - id: 1
+    buffer_size: 1000000   # バッファサイズ（バイト）
+  - id: 2
+    buffer_size: 1000000
+  - id: 3
+    buffer_size: 1000000
+  - id: 4
+    buffer_size: 1000000
+  - id: 5
+    buffer_size: 1000000
+  - id: 6
+    buffer_size: 1000000
+  - id: 7
+    buffer_size: 1000000
+  - id: 8
+    buffer_size: 1000000
+
+links:
+  - id: 1
+    node1: 1
+    node2: 2
+    capacity: 1000000    # 帯域幅（bps）
+    delay: 0.01          # 遅延（秒）
+    jitter: 0.001        # ジッター（秒）
+  - id: 2
+    node1: 2
+    node2: 3
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 3
+    node1: 3
+    node2: 4
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 4
+    node1: 4
+    node2: 5
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 5
+    node1: 5
+    node2: 6
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 6
+    node1: 6
+    node2: 7
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 7
+    node1: 7
+    node2: 8
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 8
+    node1: 8
+    node2: 1
+    capacity: 1000000
+    delay: 0.01
+    jitter: 0.001
+  - id: 9
+    node1: 2
+    node2: 5
+    capacity: 500000
+    delay: 0.02
+    jitter: 0.002
+  - id: 10
+    node1: 3
+    node2: 6
+    capacity: 500000
+    delay: 0.02
+    jitter: 0.002

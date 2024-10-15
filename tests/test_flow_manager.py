@@ -1,6 +1,11 @@
-# tests/test_flow_manager.py
-
+import sys
+import os
 import unittest
+from unittest.mock import patch, mock_open
+import yaml
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flow_manager import FlowManager
 from topology_manager import TopologyManager
 from flow import Flow
@@ -29,7 +34,8 @@ class TestFlowManager(unittest.TestCase):
         self.flow_manager.generate_flows()
         self.assertEqual(len(self.flow_manager.flows), 100)
 
-    def test_generate_flows_from_scenario(self):
+    @patch('builtins.open')
+    def test_generate_flows_from_scenario(self, mock_open_function):
         """
         generate_flowsメソッドのシナリオ読み込みテスト
         """
@@ -45,13 +51,9 @@ class TestFlowManager(unittest.TestCase):
                 }
             ]
         }
-        # シナリオを読み込むようにモック
-        def mock_open(*args, **kwargs):
-            from io import StringIO
-            return StringIO(yaml.dump(flow_scenario))
-
-        import yaml
-        yaml.open = mock_open
+        # モックされたファイルの内容を設定
+        mock_open_function.return_value.__enter__.return_value = \
+            yaml.dump(flow_scenario, default_flow_style=False)
 
         self.flow_manager.generate_flows(flow_scenario='dummy_path')
         self.assertEqual(len(self.flow_manager.flows), 1)

@@ -3,9 +3,10 @@
 from typing import List, Optional
 from packet import Packet
 from flow import Flow
-from topology_manager import TopologyManager
+from link import Link
 from node import Node
-from simulation_engine import SimulationEngine
+
+import random
 
 import networkx as nx
 class PacketManager:
@@ -18,7 +19,7 @@ class PacketManager:
         simulation_engine (SimulationEngine): シミュレーションエンジン
     """
 
-    def __init__(self, topology_manager: TopologyManager, simulation_engine: SimulationEngine):
+    def __init__(self, topology_manager, simulation_engine, central_controller, metrics_collector):
         """
         パケットマネージャの初期化
 
@@ -29,6 +30,8 @@ class PacketManager:
         self.packets_in_transit: List[Packet] = []
         self.topology_manager = topology_manager
         self.simulation_engine = simulation_engine
+        self.central_controller = central_controller
+        self.metrics_collector = metrics_collector
 
     def create_packets(self, flow: Flow) -> List[Packet]:
         """
