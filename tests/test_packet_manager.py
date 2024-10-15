@@ -1,0 +1,81 @@
+# tests/test_packet_manager.py
+
+import unittest
+from packet_manager import PacketManager
+from flow import Flow
+from topology_manager import TopologyManager
+from simulation_engine import SimulationEngine
+from node import Node
+from link import Link
+
+class TestPacketManager(unittest.TestCase):
+    """
+    PacketManagerクラスのユニットテストクラス
+    """
+
+    def setUp(self):
+        """
+        各テストメソッドの前に実行されるセットアップメソッド
+        """
+        self.topology_manager = TopologyManager()
+        self.simulation_engine = SimulationEngine()
+
+        # シンプルなトポロジを設定
+        self.topology_manager.nodes = {
+            1: Node(node_id=1),
+            2: Node(node_id=2)
+        }
+        self.topology_manager.links = {
+            1: Link(link_id=1, capacity=1000.0, delay=0.1, jitter=0.01, connected_nodes=(1, 2))
+        }
+        self.topology_manager.nodes[1].adjacent_links.append(1)
+        self.topology_manager.nodes[2].adjacent_links.append(1)
+
+        self.packet_manager = PacketManager(self.topology_manager, self.simulation_engine)
+
+    def test_create_packets(self):
+        """
+        create_packetsメソッドのテスト
+        """
+        flow = Flow(flow_id=1, service_type='data', flow_size=3000, source_node=1, destination_node=2)
+        packets = self.packet_manager.create_packets(flow)
+        self.assertEqual(len(packets), 2)  # 1500バイトのパケットが2つ
+        self.assertEqual(flow.packets, packets)
+
+    def test_send_packet(self):
+        """
+        send_packetメソッドのテスト
+        """
+        flow = Flow(flow_id=1, service_type='data', flow_size=1500, source_node=1, destination_node=2)
+        packet = self.packet_manager.create_packets(flow)[0]
+
+        # 経路を設定
+        packet.route = [1, 2]
+        self.packet_manager.send_packet(packet, self.topology_manager.get_node(1))
+
+        # イベントがスケジュールされたか確認
+        self.assertEqual(len(self.simulation_engine.event_queue), 1)
+        event = self.simulation_engine.event_queue[0]
+        self.assertEqual(event.event_time, 0.1)  # リンクの遅延時間
+
+    def test_receive_packet(self):
+        """
+        receive_packetメソッドのテスト
+        """
+        flow = Flow(flow_id=1, service_type='data', flow_size=1500, source_node=1, destination_node=2)
+        packet = self.packet_manager.create_packets(flow)[0]
+        packet.route = [1, 2]
+        packet.current_node_index = 1  # ノード2に到着
+
+        # ノード2のバッファに空きがある場合
+        self.packet_manager.receive_packet(packet, 2)
+        self.assertEqual(len(self.topology_manager.get_node(2).buffer), 1)
+
+        # バッファに空きがない場合
+        self.topology_manager.get_node(2).buffer_size = 0  # バッファサイズを0に設定
+        packet.status = "in_transit"
+        self.packet_manager.receive_packet(packet, 2)
+        self.assertEqual(packet.status, "lost")
+
+if __name__ == '__main__':
+    unittest.main()
