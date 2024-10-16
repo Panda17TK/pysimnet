@@ -10,7 +10,7 @@ flow_scenario:
   flows:
     - flow_id: 1
       service_type: "video"
-      flow_size: 10000000        # フローサイズ（バイト）
+      flow_size: 10000000
       source_node: 1
       destination_node: 5
     - flow_id: 2

@@ -28,7 +28,7 @@ class TopologyManager:
         Args:
             yaml_file (str): トポロジ定義のYAMLファイルパス
         """
-        with open(yaml_file, 'r') as file:
+        with open(yaml_file, 'r', encoding='utf-8') as file:
             topology_data = yaml.safe_load(file)
 
         # ノードの読み込み
