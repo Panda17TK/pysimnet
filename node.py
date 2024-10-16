@@ -1,5 +1,3 @@
-# node.py
-
 from typing import List, Dict, Optional
 from packet import Packet
 
@@ -17,7 +15,7 @@ class Node:
         buffer_occupancy (int): 現在のバッファ使用量（バイト）
     """
 
-    def __init__(self, node_id: int, buffer_size: int = 1000000):
+    def __init__(self, node_id: int, buffer_size: int = 1000000, demand_params: float = 0.0):
         """
         ノードの初期化
 
